@@ -29,6 +29,8 @@ import edu.stanford.bmir.protege.web.server.index.IndexUpdatingService;
 import edu.stanford.bmir.protege.web.server.jackson.ObjectMapperProvider;
 import edu.stanford.bmir.protege.web.server.mail.*;
 import edu.stanford.bmir.protege.web.server.mansyntax.render.*;
+import edu.stanford.bmir.protege.web.server.nohrdata.NohrRepository;
+import edu.stanford.bmir.protege.web.server.nohrdata.UsersNohrInstances;
 import edu.stanford.bmir.protege.web.server.owlapi.NonCachingDataFactory;
 import edu.stanford.bmir.protege.web.server.permissions.ProjectPermissionsManager;
 import edu.stanford.bmir.protege.web.server.permissions.ProjectPermissionsManagerImpl;
@@ -180,6 +182,18 @@ public class ApplicationModule {
     public UserActivityManager provideUserActivityManager(UserActivityManagerProvider provider) {
         return provider.get();
     }
+
+    //ADDED------------------------------------------
+    @Provides
+    public UsersNohrInstances provideUserNohrInstances() {
+        return UsersNohrInstances.getInstance();
+    }
+
+    @Provides
+    public NohrRepository provideNohrRepository(MongoDatabaseProvider databaseProvider) {
+        return NohrRepository.getInstance(databaseProvider);
+    }
+    //ADDED------------------------------------------
 
     @Provides
     @ApplicationSingleton

@@ -86,10 +86,34 @@ public enum BuiltInRole {
                    DELETE_DATATYPE,
                    REVERT_CHANGES),
 
+    NOHR_VIEWER(
+            VIEW_NOHR,
+            GET_RULE,
+            GET_DBMAPPING,
+            GET_DBMAPPING_INFO,
+            GET_DBMAPPING_SETTINGS,
+            DOWNLOAD_RULE,
+            DOWNLOAD_DBMAPPING,
+            EXECUTE_QUERY),
+
+    NOHR_EDITOR(
+            NOHR_VIEWER,
+            EDIT_NOHR,
+            CREATE_RULE,
+            CREATE_DBMAPPING,
+            UPDATE_RULE,
+            UPDATE_DBMAPPING,
+            DELETE_RULE,
+            DELETE_DBMAPPING,
+            UPLOAD_RULE,
+            UPLOAD_DBMAPPING),
+
     LAYOUT_EDITOR(ADD_OR_REMOVE_PERSPECTIVE,
                   ADD_OR_REMOVE_VIEW),
 
-    PROJECT_MANAGER(PROJECT_EDITOR,
+    PROJECT_MANAGER(
+                    NOHR_EDITOR,
+                    PROJECT_EDITOR,
                     LAYOUT_EDITOR,
                     SAVE_DEFAULT_PROJECT_LAYOUT,
                     EDIT_PROJECT_SETTINGS,
@@ -109,13 +133,7 @@ public enum BuiltInRole {
 
     CAN_EDIT(PROJECT_EDITOR, CAN_COMMENT),
 
-    CAN_MANAGE(CAN_EDIT, PROJECT_MANAGER, ISSUE_MANAGER)
-
-    ;
-
-
-
-
+    CAN_MANAGE(CAN_EDIT, PROJECT_MANAGER, ISSUE_MANAGER);
 
 
     private final RoleId roleId;
@@ -147,6 +165,10 @@ public enum BuiltInRole {
 
     BuiltInRole(BuiltInRole parentRole1, BuiltInRole parentRole2, BuiltInRole parentRole3, BuiltInAction... actions) {
         this(ImmutableList.of(parentRole1, parentRole2, parentRole3), ImmutableList.copyOf(Arrays.asList(actions)));
+    }
+
+    BuiltInRole(BuiltInRole parentRole1, BuiltInRole parentRole2, BuiltInRole parentRole3, BuiltInRole parentRole4, BuiltInAction... actions) {
+        this(ImmutableList.of(parentRole1, parentRole2, parentRole3, parentRole4), ImmutableList.copyOf(Arrays.asList(actions)));
     }
 
     public RoleId getRoleId() {

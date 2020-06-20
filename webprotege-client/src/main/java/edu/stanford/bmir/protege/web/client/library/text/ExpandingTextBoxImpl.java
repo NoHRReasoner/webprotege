@@ -1,6 +1,7 @@
 package edu.stanford.bmir.protege.web.client.library.text;
 
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.core.client.Scheduler;
 import com.google.gwt.dom.client.Element;
 import com.google.gwt.dom.client.Node;
 import com.google.gwt.dom.client.NodeList;
@@ -10,9 +11,12 @@ import com.google.gwt.event.logical.shared.HasSelectionHandlers;
 import com.google.gwt.event.logical.shared.HasValueChangeHandlers;
 import com.google.gwt.event.logical.shared.SelectionHandler;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
+import com.google.gwt.event.shared.GwtEvent;
+import com.google.gwt.event.shared.HandlerManager;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
+import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.ui.*;
 import edu.stanford.bmir.protege.web.client.anchor.AnchorClickedEvent;
 import edu.stanford.bmir.protege.web.client.anchor.AnchorClickedHandler;
@@ -20,6 +24,8 @@ import edu.stanford.bmir.protege.web.client.anchor.HasAnchor;
 import edu.stanford.bmir.protege.web.client.library.common.HasPlaceholder;
 import edu.stanford.bmir.protege.web.client.library.dlg.AcceptKeyHandler;
 import edu.stanford.bmir.protege.web.client.library.dlg.HasAcceptKeyHandler;
+import edu.stanford.bmir.protege.web.client.nohrUIElements.NohrRuleChangeEvent;
+import edu.stanford.bmir.protege.web.client.nohrUIElements.NohrRuleChangeEventHandler;
 
 import javax.annotation.Nonnull;
 import javax.inject.Inject;
@@ -93,8 +99,28 @@ public class ExpandingTextBoxImpl extends SimplePanel implements Focusable, HasA
 
     private AcceptKeyHandler acceptKeyHandler = () -> {};
 
+    //------------------------------ADDED-----------------------------------------------------
+    private HandlerManager handlerManager;
+    //------------------------------ADDED-----------------------------------------------------
+
     @Inject
     public ExpandingTextBoxImpl() {
+
+        //------------------------------ADDED-----------------------------------------------------
+        super();
+        handlerManager = new HandlerManager(this);
+
+        // For all browsers - catch onKeyUp
+        sinkEvents(Event.ONKEYUP);
+
+        // For IE and Firefox - catch onPaste
+        sinkEvents(Event.ONPASTE);
+
+        // For Opera - catch onInput
+        /*sinkEvents(Event.ONINPUT);*/
+
+        //------------------------------ADDED-----------------------------------------------------
+
         final TextArea textArea = new TextArea();
         SuggestOracle proxyOracle = createProxySuggestOracle();
         this.suggestBox = new SuggestBox(proxyOracle, textArea);
@@ -123,6 +149,35 @@ public class ExpandingTextBoxImpl extends SimplePanel implements Focusable, HasA
             lastSelection = event.getSelectedItem().getReplacementString();
         });
     }
+
+    //------------------------------ADDED-----------------------------------------------------
+    @Override
+    public void onBrowserEvent(Event event) {
+        super.onBrowserEvent(event);
+
+        switch (event.getTypeInt()) {
+            case Event.ONKEYUP:
+            case Event.ONPASTE:
+                /*case Event.ONINPUT:*/
+            {
+                // Scheduler needed so pasted data shows up in TextBox before we fire event
+                Scheduler.get().scheduleDeferred(() -> fireEvent(new NohrRuleChangeEvent()));
+                break;
+            }
+            default:
+                // Do nothing
+        }
+    }
+
+    @Override
+    public void fireEvent(GwtEvent<?> event) {
+        handlerManager.fireEvent(event);
+    }
+
+    public HandlerRegistration addTextChangeEventHandler(NohrRuleChangeEventHandler handler) {
+        return handlerManager.addHandler(NohrRuleChangeEvent.TYPE, handler);
+    }
+    //------------------------------ADDED-----------------------------------------------------
 
     private boolean isCurrentTextAutoCompleted(TextArea textArea) {
         return textArea.getText().equals(lastSelection);

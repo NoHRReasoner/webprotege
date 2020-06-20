@@ -41,7 +41,7 @@ public class WebProtegeSessionListener_TestCase {
 
     @Before
     public void setUp() throws Exception {
-        listener = new WebProtegeSessionListener(activityManager);
+        listener = new WebProtegeSessionListener(activityManager, null);
         when(sessionEvent.getSession()).thenReturn(session);
         when(session.getAttribute(WebProtegeSessionAttribute.LOGGED_IN_USER.getAttributeName())).thenReturn(userId);
     }

@@ -66,7 +66,10 @@ public class PerspectiveLinkManagerImpl implements PerspectiveLinkManager {
                         PerspectiveId.get("Comments"),
                         PerspectiveId.get("Changes by Entity"),
                         PerspectiveId.get("History"),
-                        PerspectiveId.get("Query")
+                        PerspectiveId.get("Query"),
+                        PerspectiveId.get("NoHR Rules"),
+                        PerspectiveId.get("NoHR Query"),
+                        PerspectiveId.get("NoHR Database Mappings")
                 )
         );
     }

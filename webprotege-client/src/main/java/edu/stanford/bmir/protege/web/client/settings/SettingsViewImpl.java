@@ -90,6 +90,9 @@ public class SettingsViewImpl extends Composite implements SettingsView {
     @Override
     public void addSectionViewContainer(@Nonnull SettingsSectionViewContainer view) {
         settingsContainer.add(view);
+        //--------------------------ADDED-------------------------------------
+        //Scroll the window to the added view
+        view.asWidget().getElement().scrollIntoView();
     }
 
     @Override

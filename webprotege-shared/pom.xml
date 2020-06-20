@@ -123,7 +123,11 @@
             <version>${autovalue.version}</version>
             <scope>provided</scope>
         </dependency>
-
+        <dependency>
+            <groupId>edu.stanford.protege</groupId>
+            <artifactId>nohr-reasoner</artifactId>
+            <version>${project.version}</version>
+        </dependency>
     </dependencies>
 
     <build>

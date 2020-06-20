@@ -1,5 +1,6 @@
 package edu.stanford.bmir.protege.web.shared.projectsettings;
 
+import edu.stanford.bmir.protege.web.shared.nohrcodes.NohrSettingsImpl;
 import edu.stanford.bmir.protege.web.shared.project.ProjectId;
 import org.junit.Before;
 import org.junit.Test;
@@ -30,13 +31,13 @@ public class SetProjectSettingsAction_TestCase {
     @Before
     public void setUp() throws Exception {
         when(projectSettings.getProjectId()).thenReturn(projectId);
-        action = new SetProjectSettingsAction(projectSettings);
+        action = new SetProjectSettingsAction(projectSettings, null, null);
     }
 
 
     @Test(expected = NullPointerException.class)
     public void shouldThrowNullPointerExceptionIf_ProjectSettings_IsNull() {
-        new SetProjectSettingsAction(null);
+        new SetProjectSettingsAction(null,null, null);
     }
 
     @Test
@@ -56,13 +57,13 @@ public class SetProjectSettingsAction_TestCase {
 
     @Test
     public void shouldBeEqualToOther() {
-        SetProjectSettingsAction other = new SetProjectSettingsAction(projectSettings);
+        SetProjectSettingsAction other = new SetProjectSettingsAction(projectSettings,null, null);
         assertThat(action, is(equalTo(other)));
     }
 
     @Test
     public void shouldHaveSameHashCode() {
-        SetProjectSettingsAction other = new SetProjectSettingsAction(projectSettings);
+        SetProjectSettingsAction other = new SetProjectSettingsAction(projectSettings,null, null);
         assertThat(action.hashCode(), is(other.hashCode()));
     }
 }

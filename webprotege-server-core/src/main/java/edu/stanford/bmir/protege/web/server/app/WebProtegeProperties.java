@@ -106,6 +106,14 @@ public class WebProtegeProperties implements Serializable {
         return new File(dataDirectory);
     }
 
+    //---------------------------ADDED-------------------------------------
+    @Nonnull
+    public int getNoHRInstanceTimer(){
+        int time = Integer.parseInt(getOptionalString(NOHR_TIMER).get());
+        return time;
+    }
+    //---------------------------ADDED-------------------------------------
+
     @Nonnull
     public Optional<String> getDBPort() {
         return getOptionalString(MONGO_DB_PORT);

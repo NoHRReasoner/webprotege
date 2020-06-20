@@ -55,6 +55,77 @@ public class MessageBoxErrorDisplay implements DispatchErrorMessageDisplay {
         displayMessageBox(messages.error_permissionError_title() , specificMessage);
     }
 
+    //ADDED----------------------
+    @Override
+    public void displayRuleAlreadyExistErrorMessage(String specificMessage) {
+        displayMessageBox(messages.error_duplicatedRuleError_title() , specificMessage);
+    }
+
+    @Override
+    public void displayDBMappingAlreadyExistErrorMessage(String specificMessage) {
+        displayMessageBox(messages.error_duplicatedDBMappingError_title() , specificMessage);
+    }
+    @Override
+    public void displayEmptyFieldsErrorMessage(String specificMessage) {
+        displayMessageBox(messages.error_emptyFieldsError_title() , specificMessage);
+    }
+
+    @Override
+    public void displayRuleParserErrorMessage(String specificMessage) {
+        displayMessageBox(messages.error_ruleParserError_title() , specificMessage);
+    }
+
+    @Override
+    public void displayDatabaseErrorMessage(String specificMessage) {
+        displayMessageBox(messages.error_databaseError_title() , specificMessage);
+    }
+
+    @Override
+    public void displayQueryParserErrorMessage(String specificMessage) {
+        displayMessageBox(messages.error_queryParserError_title() , specificMessage);
+    }
+
+    @Override
+    public void displayUnsupportedAxiomsErrorMessage(String specificMessage) {
+        displayMessageBox(messages.error_unsupportedAxiomsError_title() , specificMessage);
+    }
+
+    @Override
+    public void displayPrologEngineCreationErrorMessage(String specificMessage) {
+        displayMessageBox(messages.error_prologEngineCreation_title() , specificMessage);
+    }
+
+    @Override
+    public void displayInconsistentOntologyErrorMessage(String specificMessage) {
+        displayMessageBox(messages.error_inconsistentOntology_title() , specificMessage);
+    }
+
+    @Override
+    public void displayQueryExecutingErrorMessage(String specificMessage) {
+        displayMessageBox(messages.error_queryExecuting_title() , specificMessage);
+    }
+
+    @Override
+    public void displayInvalidFileErrorMessage(String specificMessage) {
+        displayMessageBox(messages.error_invalidFile_title() , specificMessage);
+    }
+
+    @Override
+    public void displayLockedTableErrorMessage(String specificMessage) {
+        displayMessageBox(messages.error_invalidAction_title() , specificMessage);
+    }
+
+    @Override
+    public void displayNoTablesAddedErrorMessage(String specificMessage) {
+        displayMessageBox(messages.error_noTablesAdded_title() , specificMessage);
+    }
+
+    @Override
+    public void displayUnknownErrorMessage(String specificMessage) {
+        displayMessageBox(messages.error_unknownError_title() , specificMessage);
+    }
+    //ADDED----------------------
+
     @Override
     public void displayGeneralErrorMessage(String title, String message) {
         displayMessageBox(title, message);

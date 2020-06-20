@@ -12,6 +12,8 @@ public enum PrimitiveType {
 
     CLASS(EntityType.CLASS),
 
+    NOHR_RULE(null),
+
     NAMED_INDIVIDUAL(EntityType.NAMED_INDIVIDUAL),
 
 

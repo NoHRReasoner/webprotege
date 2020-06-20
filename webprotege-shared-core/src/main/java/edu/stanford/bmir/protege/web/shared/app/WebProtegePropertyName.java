@@ -32,6 +32,11 @@ public enum WebProtegePropertyName {
     @WebProtegePropertiesDocumentation(description = "The directory where WebProtégé data is stored", example = "/src/webprotege")
     DATA_DIRECTORY("data.directory"),
 
+    //---------------------------ADDED-------------------------------------
+    @WebProtegePropertiesDocumentation(description = "Time (in seconds) that a NoHR Reasoner Instance can stay inactive before being stopped", example = "600")
+    NOHR_TIMER("nohr.time"),
+    //---------------------------ADDED-------------------------------------
+
     @WebProtegePropertiesDocumentation(description = "The host name of the mongodb server", example = "localhost")
     MONGO_DB_HOST("mongodb.host", PropertyValue.ofString("localhost")),
 

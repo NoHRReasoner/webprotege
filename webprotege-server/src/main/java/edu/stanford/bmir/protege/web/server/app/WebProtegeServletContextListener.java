@@ -40,6 +40,12 @@ public class WebProtegeServletContextListener implements ServletContextListener 
             servletContext.addServlet("ProjectDownloadServlet", serverComponent.getProjectDownloadServlet())
                           .addMapping("/download");
 
+            servletContext.addServlet("RulesDownloadServlet", serverComponent.getRulesDownloadServlet())
+                    .addMapping("/download/downloadrules");
+
+            servletContext.addServlet("DBMappingDownloadServlet", serverComponent.getDBMappingDownloadServlet())
+                    .addMapping("/download/downloaddbmapping");
+
             servletContext.addServlet("FileUploadServlet", serverComponent.getFileUploadServlet())
                           .addMapping("/webprotege/submitfile");
 

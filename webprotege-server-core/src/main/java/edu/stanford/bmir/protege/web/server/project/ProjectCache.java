@@ -6,6 +6,7 @@ import com.google.common.collect.Interners;
 import edu.stanford.bmir.protege.web.server.dispatch.impl.ProjectActionHandlerRegistry;
 import edu.stanford.bmir.protege.web.server.events.EventManager;
 import edu.stanford.bmir.protege.web.server.inject.ProjectComponent;
+import edu.stanford.bmir.protege.web.server.nohrdata.UsersNohrInstances;
 import edu.stanford.bmir.protege.web.server.revision.RevisionManager;
 import edu.stanford.bmir.protege.web.shared.HasDispose;
 import edu.stanford.bmir.protege.web.shared.csv.DocumentId;
@@ -68,14 +69,18 @@ public class ProjectCache implements HasDispose {
 
     private final ProjectComponentFactory projectComponentFactory;
 
+    private final UsersNohrInstances usersNohrInstances;
+
     @Inject
     public ProjectCache(@Nonnull ProjectComponentFactory projectComponentFactory,
                         @Nonnull ProjectImporterFactory projectImporterFactory,
-                        @DormantProjectTime  long dormantProjectTime) {
+                        @DormantProjectTime  long dormantProjectTime,
+                        @Nonnull UsersNohrInstances usersNohrInstances) {
         this.projectComponentFactory = checkNotNull(projectComponentFactory);
         this.projectImporterFactory = checkNotNull(projectImporterFactory);
         projectIdInterner = Interners.newWeakInterner();
         this.dormantProjectTime = dormantProjectTime;
+        this.usersNohrInstances = usersNohrInstances;
         logger.info("Dormant project time: {} milliseconds", dormantProjectTime);
     }
 
@@ -216,6 +221,8 @@ public class ProjectCache implements HasDispose {
             if(projectComponent != null) {
                 var projectDisposableObjectManager = projectComponent.getDisposablesManager();
                 projectDisposableObjectManager.dispose();
+                /*if (!usersNohrInstances.isQueryExecuting(projectId))
+                    usersNohrInstances.stopProjectNohrInstance(projectId);*/
             }
             lastAccessMap.remove(projectId);
         }

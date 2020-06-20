@@ -52,7 +52,7 @@ public class SetProjectSettingsActionHandler_TestCase {
         when(action.getProjectId()).thenReturn(projectId);
         when(action.getProjectSettings()).thenReturn(projectSettings);
         when(detailsManager.getProjectSettings(projectId)).thenReturn(projectSettings);
-        handler = new SetProjectSettingsActionHandler(accessManager, detailsManager);
+        handler = new SetProjectSettingsActionHandler(accessManager, detailsManager, null, null);
     }
 
     @Test

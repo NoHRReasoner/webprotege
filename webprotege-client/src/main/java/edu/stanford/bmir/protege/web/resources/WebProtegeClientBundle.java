@@ -266,15 +266,20 @@ public interface WebProtegeClientBundle extends ClientBundle {
     @DataResource.MimeType("image/svg+xml")
     DataResource downloadIcon();
 
-
     @Source("settings.svg")
     @DataResource.MimeType("image/svg+xml")
     DataResource settingsIcon();
 
-
     @Source("filter.svg")
     @DataResource.MimeType("image/svg+xml")
     DataResource filterIcon();
+
+    //------------------------ADDED-----------------------------
+    @Source("upload.svg")
+    @DataResource.MimeType("image/svg+xml")
+    DataResource uploadIcon();
+    //------------------------ADDED-----------------------------
+
 
     @Source("glyphs.css")
     Glyphs glyphs();
@@ -526,6 +531,22 @@ public interface WebProtegeClientBundle extends ClientBundle {
 
     interface ButtonsCss extends CssResource {
 
+        //-----------ADDED-----------------------------------
+        @ClassName("wp-btn-g--create-NoHR-rule")
+        String createNoHRrule();
+
+        @ClassName("wp-btn-g--delete-NoHR-rule")
+        String deleteNoHRrule();
+
+        @ClassName("wp-btn-g--download-NoHR-rule")
+        String downloadNoHRrule();
+
+        @ClassName("wp-btn-g--upload-NoHR-rule")
+        String uploadNoHRrule();
+
+        @ClassName("wp-btn-g--upload")
+        String upload();
+        //-----------ADDED-----------------------------------
         /**
          * The base class for buttons
          */
@@ -554,6 +575,14 @@ public interface WebProtegeClientBundle extends ClientBundle {
         @ClassName("wp-btn--input")
         String inputButton();
 
+        //---------------------------------------ADDED--------------------------------------------------------
+        /**
+         * A button that appears in the last section of NoHR Database mappings settings
+         * @return
+         */
+        @ClassName("wp-btn--addsection")
+        String addSectionButton();
+        //---------------------------------------ADDED--------------------------------------------------------
         /**
          * The primary button on a page or on a settings
          */

@@ -3,17 +3,145 @@ package edu.stanford.bmir.protege.web.client;
 
 import com.google.gwt.safehtml.shared.SafeHtml;
 
-import static com.google.gwt.i18n.client.LocalizableResource.*;
+import static com.google.gwt.i18n.client.LocalizableResource.DefaultLocale;
 
 @DefaultLocale()
 public interface Messages extends com.google.gwt.i18n.client.Messages {
 
+    //ADDED------------------------------
+
+    @DefaultMessage("NoHR Rules")
+    @Key("NoHRRules")
+    String NoHR_Rules();
     
+    @DefaultMessage("NoHR Query")
+    @Key("NoHRQuery")
+    String NoHR_Query();
+
+    @DefaultMessage("NoHR Database Mappings")
+    @Key("NoHRDBMappings")
+    String NoHR_Database_Mappings();
+
+    @DefaultMessage("NoHR Database Mappings Creator")
+    @Key("NoHRDBMappingsCreator")
+    String NoHR_Database_Mappings_Creator();
+
+
+    @DefaultMessage("New Rule")
+    @Key("newNoHRRule")
+    String newNoHRRule();
+
+    @DefaultMessage("Update Rule")
+    @Key("updateNoHRRule")
+    String updateNoHRRule();
+
+    @DefaultMessage("Upload Rules to project")
+    @Key("uploadNoHRRules")
+    String uploadNoHRRules();
+
+    @DefaultMessage("New Database Mapping")
+    @Key("newNoHRDBMapping")
+    String newNoHRDBMapping();
+
+    @DefaultMessage("Update Database Mapping")
+    @Key("updateNoHRDBMapping")
+    String updateNoHRDBMapping();
+
+    @DefaultMessage("Upload Database Mappings to project")
+    @Key("uploadNoHRDBMapping")
+    String uploadNoHRDBMapping();
+
+    @DefaultMessage("Query")
+    @Key("labelquery")
+    String label_query();
+
+    @DefaultMessage("Query answers")
+    @Key("labelqueryanswers")
+    String label_query_answers();
+
+    @DefaultMessage("Duplicated Rule")
+    @Key("error.duplicatedRuleError.title")
+    String error_duplicatedRuleError_title();
+
+    @DefaultMessage("Invalid Action")
+    @Key("error.emptyFieldsError.title")
+    String error_emptyFieldsError_title();
+
+    @DefaultMessage("Duplicated Database Mapping")
+    @Key("error.duplicatedDBMappingError.title")
+    String error_duplicatedDBMappingError_title();
+
+    @DefaultMessage("Invalid Rule")
+    @Key("error.ruleParserError.title")
+    String error_ruleParserError_title();
+
+    @DefaultMessage("Database Error")
+    @Key("error.databaseError.title")
+    String error_databaseError_title();
+
+    @DefaultMessage("Query failed to execute")
+    @Key("error.queryParserError.title")
+    String error_queryParserError_title();
+
+    @DefaultMessage("Query failed to execute")
+    @Key("error.unsupportedAxiomsError.title")
+    String error_unsupportedAxiomsError_title();
+
+    @DefaultMessage("Query failed to execute")
+    @Key("error.prologEngineCreation.title")
+    String error_prologEngineCreation_title();
+
+    @DefaultMessage("Query failed to execute")
+    @Key("error.inconsistentOntology.title")
+    String error_inconsistentOntology_title();
+
+    @DefaultMessage("Query Executing on Project")
+    @Key("error.queryExecuting.title")
+    String error_queryExecuting_title();
+
+    @DefaultMessage("Failed to upload the file")
+    @Key("error.invalidFile.title")
+    String error_invalidFile_title();
+
+    @DefaultMessage("Invalid Action")
+    @Key("error.invalidAction.title")
+    String error_invalidAction_title();
+
+    @DefaultMessage("Invalid Action")
+    @Key("error.noTablesAdded.title")
+    String error_noTablesAdded_title();
+
+    @DefaultMessage("Unknown Error")
+    @Key("error.unknownError.title")
+    String error_unknownError_title();
+
+    @DefaultMessage("Nohr Settings")
+    @Key("projectSettings.nohrSettings")
+    String projectSettings_nohrSettings();
+
+    @DefaultMessage("Nohr Database Mapping Editor")
+    @Key("projectSettings.nohrDatabaseSettings")
+    String projectSettings_nohrDatabaseSettings();
+
+    @DefaultMessage("Download")
+    @Key("download")
+    String nohr_download();
+
+    @DefaultMessage("Upload")
+    @Key("upload")
+    String nohr_upload();
+
+    @DefaultMessage("Update")
+    @Key("update")
+    String update();
+
+    //ADDED------------------------------
+
     @DefaultMessage("About")
     @Key("about")
     String about();
 
-    
+
     @DefaultMessage("Add tab")
     @Key("addTab")
     String addTab();
@@ -162,7 +290,7 @@ public interface Messages extends com.google.gwt.i18n.client.Messages {
     
     @DefaultMessage("Are you sure you want to delete the {0} <strong>{1}</strong>?")
     @Key("delete.entity.msg")
-    String delete_entity_msg(String arg0,  String arg1);
+    String delete_entity_msg(String arg0, String arg1);
 
     
     @DefaultMessage("Delete {0}")
@@ -722,7 +850,7 @@ public interface Messages extends com.google.gwt.i18n.client.Messages {
     String projectSettings_displayName();
 
     
-    @DefaultMessage("Main Settings")
+    @DefaultMessage("pt.unl.fct.di.novalincs.nohr.plugin.query.pt.unl.fct.di.novalincs.nohr.plugin.test.Main Settings")
     @Key("projectSettings.mainSettings")
     String projectSettings_mainSettings();
 

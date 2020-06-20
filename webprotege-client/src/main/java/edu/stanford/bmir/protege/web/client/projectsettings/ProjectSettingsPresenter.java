@@ -1,23 +1,29 @@
 package edu.stanford.bmir.protege.web.client.projectsettings;
 
 import com.google.common.collect.ImmutableList;
+import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 import com.google.web.bindery.event.shared.EventBus;
 import edu.stanford.bmir.protege.web.client.Messages;
 import edu.stanford.bmir.protege.web.client.app.PermissionScreener;
 import edu.stanford.bmir.protege.web.client.crud.EntityCrudKitSettingsEditor;
-import edu.stanford.bmir.protege.web.client.dispatch.DispatchServiceCallback;
 import edu.stanford.bmir.protege.web.client.dispatch.DispatchServiceManager;
 import edu.stanford.bmir.protege.web.client.lang.DefaultDictionaryLanguageView;
 import edu.stanford.bmir.protege.web.client.lang.DefaultDisplayNameSettingsView;
 import edu.stanford.bmir.protege.web.client.renderer.AnnotationPropertyIriRenderer;
 import edu.stanford.bmir.protege.web.client.settings.SettingsPresenter;
 import edu.stanford.bmir.protege.web.shared.DataFactory;
-import edu.stanford.bmir.protege.web.shared.crud.*;
+import edu.stanford.bmir.protege.web.shared.crud.GetEntityCrudKitsAction;
+import edu.stanford.bmir.protege.web.shared.crud.IRIPrefixUpdateStrategy;
+import edu.stanford.bmir.protege.web.shared.crud.SetEntityCrudKitSettingsAction;
 import edu.stanford.bmir.protege.web.shared.entity.OWLAnnotationPropertyData;
 import edu.stanford.bmir.protege.web.shared.lang.DictionaryLanguageUsage;
 import edu.stanford.bmir.protege.web.shared.lang.DisplayNameSettings;
+import edu.stanford.bmir.protege.web.shared.nohrcodes.NohrDatabaseSettings;
+import edu.stanford.bmir.protege.web.shared.nohrcodes.NohrDatabaseSettingsImpl;
+import edu.stanford.bmir.protege.web.shared.nohrcodes.NohrSettings;
+import edu.stanford.bmir.protege.web.shared.nohrcodes.NohrSettingsImpl;
 import edu.stanford.bmir.protege.web.shared.project.GetProjectInfoAction;
 import edu.stanford.bmir.protege.web.shared.project.ProjectId;
 import edu.stanford.bmir.protege.web.shared.projectsettings.*;
@@ -27,6 +33,8 @@ import org.semanticweb.owlapi.model.IRI;
 
 import javax.annotation.Nonnull;
 import javax.inject.Inject;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Optional;
 
 import static com.google.common.base.Preconditions.checkNotNull;
@@ -67,6 +75,12 @@ public class ProjectSettingsPresenter {
     private final SlackWebhookSettingsView slackWebhookSettingsView;
 
     @Nonnull
+    private final NohrSettingsView nohrSettingsView;
+
+    @Nonnull
+    private final NohrDatabaseSettingsView nohrDatabaseSettingsView;
+
+    @Nonnull
     private final WebhookSettingsView webhookSettingsView;
 
     @Nonnull
@@ -81,6 +95,8 @@ public class ProjectSettingsPresenter {
     @Nonnull
     private Optional<ImmutableList<DictionaryLanguageUsage>> currentLanguageUsage = Optional.empty();
 
+    private List<NohrDatabaseSettingsView> dbSettingsToAdd;
+
     @Inject
     public ProjectSettingsPresenter(@Nonnull ProjectId projectId,
                                     @Nonnull PermissionScreener permissionScreener,
@@ -91,8 +107,11 @@ public class ProjectSettingsPresenter {
                                     @Nonnull DefaultDictionaryLanguageView defaultDictionaryLanguageView,
                                     @Nonnull DefaultDisplayNameSettingsView defaultDisplayNameSettingsView,
                                     @Nonnull EntityCrudKitSettingsEditor entityCrudKitSettingsEditor, @Nonnull SlackWebhookSettingsView slackWebhookSettingsView,
+                                    @Nonnull NohrSettingsView nohrSettingsView,
+                                    @Nonnull NohrDatabaseSettingsView nohrDatabaseSettingsView,
                                     @Nonnull WebhookSettingsView webhookSettingsView,
-                                    @Nonnull Messages messages, @Nonnull AnnotationPropertyIriRenderer annotationPropertyIriRenderer) {
+                                    @Nonnull Messages messages,
+                                    @Nonnull AnnotationPropertyIriRenderer annotationPropertyIriRenderer) {
         this.projectId = checkNotNull(projectId);
         this.permissionScreener = checkNotNull(permissionScreener);
         this.dispatchServiceManager = checkNotNull(dispatchServiceManager);
@@ -103,9 +122,13 @@ public class ProjectSettingsPresenter {
         this.defaultDisplayNameSettingsView = checkNotNull(defaultDisplayNameSettingsView);
         this.entityCrudKitSettingsEditor = checkNotNull(entityCrudKitSettingsEditor);
         this.slackWebhookSettingsView = checkNotNull(slackWebhookSettingsView);
+        this.nohrSettingsView = checkNotNull(nohrSettingsView);
+        this.nohrDatabaseSettingsView = checkNotNull(nohrDatabaseSettingsView);
         this.webhookSettingsView = checkNotNull(webhookSettingsView);
         this.messages = checkNotNull(messages);
         this.annotationPropertyIriRenderer = checkNotNull(annotationPropertyIriRenderer);
+        this.dbSettingsToAdd = new LinkedList<>();
+
     }
 
     public ProjectId getProjectId() {
@@ -115,8 +138,8 @@ public class ProjectSettingsPresenter {
 
     public void start(AcceptsOneWidget container) {
         permissionScreener.checkPermission(EDIT_PROJECT_SETTINGS.getActionId(),
-                                           container,
-                                           () -> displaySettings(container));
+                container,
+                () -> displaySettings(container));
 
     }
 
@@ -125,8 +148,10 @@ public class ProjectSettingsPresenter {
     }
 
     private void displaySettings(AcceptsOneWidget container) {
+        dbSettingsToAdd.clear();
         settingsPresenter.setSettingsTitle(messages.projectSettings_title());
         settingsPresenter.start(container);
+        /*settingsPresenter.addDatabaseSettingsSectionHandler(this::addSectionSettings);*/
         settingsPresenter.setApplySettingsHandler(this::applySettings);
         settingsPresenter.setCancelSettingsHandler(this::handleCancel);
         settingsPresenter.addSection(messages.projectSettings_mainSettings()).setWidget(generalSettingsView);
@@ -136,32 +161,44 @@ public class ProjectSettingsPresenter {
         settingsPresenter.addSection(messages.displayName_settings_project_title()).setWidget(defaultDisplayNameSettingsView);
         settingsPresenter.addSection(messages.projectSettings_slackWebHookUrl()).setWidget(slackWebhookSettingsView);
         settingsPresenter.addSection(messages.projectSettings_payloadUrls()).setWidget(webhookSettingsView);
+        settingsPresenter.addSection(messages.projectSettings_nohrSettings()).setWidget(nohrSettingsView);
+        settingsPresenter.addSection(messages.projectSettings_nohrDatabaseSettings()).setWidget(nohrDatabaseSettingsView);
         settingsPresenter.setBusy(container, true);
         dispatchServiceManager.execute(new GetProjectInfoAction(projectId),
-                                       result -> {
-                                           ProjectSettings projectSettings = result.getProjectDetails();
-                                           displayProjectSettings(container, projectSettings, result.getProjectLanguages());
-                                       });
+                result -> {
+                    ProjectSettings projectSettings = result.getProjectDetails();
+                    displayProjectSettings(container, projectSettings, result.getProjectLanguages(), result.getNohrSettings(), result.getNohrDatabaseSettings());
+                });
         dispatchServiceManager.execute(new GetEntityCrudKitsAction(projectId),
-                                       result -> {
-                                            entityCrudKitSettingsEditor.setEntityCrudKits(result.getKits());
-                                            entityCrudKitSettingsEditor.setValue(result.getCurrentSettings());
-                                       });
+                result -> {
+                    entityCrudKitSettingsEditor.setEntityCrudKits(result.getKits());
+                    entityCrudKitSettingsEditor.setValue(result.getCurrentSettings());
+                });
         defaultDisplayNameSettingsView.setResetLanguagesHandler(this::handleResetDisplayNameLanguages);
+    }
+
+    private void addSectionSettings(ClickEvent clickEvent) {
+        dbSettingsToAdd.get(dbSettingsToAdd.size()-1).disableAddButton();
+        NohrDatabaseSettingsView section = new NohrDatabaseSettingsViewImpl();
+        section.addClickHandler(this::addSectionSettings);
+        dbSettingsToAdd.add(section);
+        settingsPresenter.addSection(messages.projectSettings_nohrDatabaseSettings()).setWidget(section);
     }
 
     private void handleResetDisplayNameLanguages() {
         currentLanguageUsage.ifPresent(langUsage -> {
             ImmutableList<DictionaryLanguageData> langUsageData = langUsage.stream()
-                                                                           .map(DictionaryLanguageUsage::getDictionaryLanguage)
-                                                                           .collect(toImmutableList());
+                    .map(DictionaryLanguageUsage::getDictionaryLanguage)
+                    .collect(toImmutableList());
             defaultDisplayNameSettingsView.setPrimaryLanguages(langUsageData);
         });
     }
 
     private void displayProjectSettings(@Nonnull AcceptsOneWidget container,
                                         @Nonnull ProjectSettings projectSettings,
-                                        @Nonnull ImmutableList<DictionaryLanguageUsage> languages) {
+                                        @Nonnull ImmutableList<DictionaryLanguageUsage> languages,
+                                        @Nonnull NohrSettings nohrSettings,
+                                        @Nonnull List<NohrDatabaseSettings> nohrDatabaseSettings) {
         this.currentProjectSettings = Optional.of(projectSettings);
         this.currentLanguageUsage = Optional.of(languages);
         generalSettingsView.setDisplayName(projectSettings.getProjectDisplayName());
@@ -173,6 +210,36 @@ public class ProjectSettingsPresenter {
         slackWebhookSettingsView.setWebhookUrl(slackIntegrationSettings.getPayloadUrl());
         WebhookSettings webhookSettings = projectSettings.getWebhookSettings();
         webhookSettingsView.setWebhookUrls(webhookSettings.getWebhookSettings());
+
+        nohrSettingsView.setSettings(nohrSettings);
+
+        if (!nohrDatabaseSettings.isEmpty()) {
+
+            if(nohrDatabaseSettings.size() != 1)
+                nohrDatabaseSettingsView.disableAddButton();
+
+            nohrDatabaseSettingsView.setDatabaseSettings(nohrDatabaseSettings.get(0));
+            nohrDatabaseSettingsView.addClickHandler(this::addSectionSettings);
+            dbSettingsToAdd.add(nohrDatabaseSettingsView);
+
+            for (int i = 1; i < nohrDatabaseSettings.size(); i++) {
+                NohrDatabaseSettingsView section = new NohrDatabaseSettingsViewImpl();
+                section.addClickHandler(this::addSectionSettings);
+                section.setDatabaseSettings(nohrDatabaseSettings.get(i));
+
+                if(i != nohrDatabaseSettings.size()-1)
+                    section.disableAddButton();
+
+                dbSettingsToAdd.add(section);
+                settingsPresenter.addSection(messages.projectSettings_nohrDatabaseSettings()).setWidget(section);
+
+            }
+        } else {
+            nohrDatabaseSettingsView.addClickHandler(this::addSectionSettings);
+            dbSettingsToAdd.add(nohrDatabaseSettingsView);
+        }
+
+        /*nohrDatabaseSettingsView.setDatabaseSettings(nohrDatabaseSettings);*/
         settingsPresenter.setBusy(container, false);
     }
 
@@ -180,8 +247,7 @@ public class ProjectSettingsPresenter {
         IRI annotationPropertyIri = defaultLanguage.getAnnotationPropertyIri();
         if (annotationPropertyIri != null) {
             annotationPropertyIriRenderer.renderAnnotationPropertyIri(annotationPropertyIri, defaultDictionaryLanguageView::setAnnotationProperty);
-        }
-        else {
+        } else {
             defaultDictionaryLanguageView.clearAnnotationProperty();
         }
         defaultDictionaryLanguageView.setLanguageTag(defaultLanguage.getLang());
@@ -192,15 +258,13 @@ public class ProjectSettingsPresenter {
         ImmutableList<DictionaryLanguageData> langList = displayNameSettings.getPrimaryDisplayNameLanguages();
         if (!langList.isEmpty()) {
             defaultDisplayNameSettingsView.setPrimaryLanguages(langList);
-        }
-        else {
+        } else {
             ImmutableList<DictionaryLanguageData> activeLanguages = languages.stream()
-                                                                             .map(DictionaryLanguageUsage::getDictionaryLanguage)
-                                                                             .collect(toImmutableList());
+                    .map(DictionaryLanguageUsage::getDictionaryLanguage)
+                    .collect(toImmutableList());
             defaultDisplayNameSettingsView.setPrimaryLanguages(activeLanguages);
         }
     }
-
 
     private void applySettings() {
         SlackIntegrationSettings slackIntegrationSettings = SlackIntegrationSettings.get(slackWebhookSettingsView.getWebhookrUrl());
@@ -214,22 +278,39 @@ public class ProjectSettingsPresenter {
                 slackIntegrationSettings,
                 webhookSettings
         );
-        dispatchServiceManager.execute(new SetProjectSettingsAction(projectSettings), result -> {
+
+        NohrSettings nohrSettings = new NohrSettingsImpl(nohrSettingsView.getELSetting(), nohrSettingsView.getQLSetting(), nohrSettingsView.getRLSetting(), nohrSettingsView.getEngineSetting());
+        /*List<NohrDatabaseSettings> nohrDatabaseSettings = nohrDatabaseSettingsView.getDatabaseSettings();*/
+        List<NohrDatabaseSettings> nohrDatabaseSettings = new LinkedList<>();
+        for (NohrDatabaseSettingsView setting : dbSettingsToAdd) {
+            if (setting.isValidateInput()) {
+                NohrDatabaseSettings newSetting = new NohrDatabaseSettingsImpl();
+                newSetting.setConnectionName(setting.getOdbcName());
+                newSetting.setDatabaseName(setting.getDatabaseName());
+                newSetting.setDatabaseType(setting.getDatabaseType().equals("MYSQL") ? "MySQL" : "Oracle");
+                newSetting.setUsername(setting.getUsername());
+                newSetting.setPassword(setting.getPassword());
+                nohrDatabaseSettings.add(newSetting);
+            }
+        }
+
+        dispatchServiceManager.execute(new SetProjectSettingsAction(projectSettings, nohrSettings, nohrDatabaseSettings), result -> {
             eventBus.fireEvent(new ProjectSettingsChangedEvent(projectSettings).asGWTEvent());
             settingsPresenter.goToNextPlace();
         });
         entityCrudKitSettingsEditor.getValue().ifPresent(settings -> {
             dispatchServiceManager.execute(new SetEntityCrudKitSettingsAction(projectId,
-                                                                              settings, settings,
-                                                                              IRIPrefixUpdateStrategy.LEAVE_INTACT),
-                                           result -> {});
+                            settings, settings,
+                            IRIPrefixUpdateStrategy.LEAVE_INTACT),
+                    result -> {
+                    });
         });
 
     }
 
     private DictionaryLanguage getDefaultLanguage() {
         OWLAnnotationPropertyData property = defaultDictionaryLanguageView.getAnnotationProperty()
-                                                                          .orElse(DataFactory.getRdfsLabelData());
+                .orElse(DataFactory.getRdfsLabelData());
         String langTag = defaultDictionaryLanguageView.getLanguageTag();
         return DictionaryLanguage.create(property.getEntity().getIRI(), langTag);
     }

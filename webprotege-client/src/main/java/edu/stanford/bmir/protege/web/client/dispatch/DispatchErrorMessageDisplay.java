@@ -9,6 +9,35 @@ import com.google.gwt.user.client.rpc.InvocationException;
  */
 public interface DispatchErrorMessageDisplay {
 
+    //ADDED----------------------
+    void displayRuleAlreadyExistErrorMessage(String specificMessage);
+
+    void displayDBMappingAlreadyExistErrorMessage(String specificMessage);
+
+    void displayEmptyFieldsErrorMessage(String specificMessage);
+
+    void displayRuleParserErrorMessage(String specificMessage);
+
+    void displayDatabaseErrorMessage(String specificMessage);
+
+    void displayQueryParserErrorMessage(String specificMessage);
+
+    void displayUnsupportedAxiomsErrorMessage(String specificMessage);
+
+    void displayPrologEngineCreationErrorMessage(String specificMessage);
+
+    void displayInconsistentOntologyErrorMessage(String specificMessage);
+
+    void displayQueryExecutingErrorMessage(String specificMessage);
+
+    void displayInvalidFileErrorMessage(String specificMessage);
+
+    void displayLockedTableErrorMessage(String specificMessage);
+
+    void displayNoTablesAddedErrorMessage(String specificMessage);
+
+    void displayUnknownErrorMessage(String specificMessage);
+    //ADDED----------------------
     /**
      * Display an error message indicating that the submitted action could not be executed because the user does not
      * have permission to execute it.
@@ -38,5 +67,4 @@ public interface DispatchErrorMessageDisplay {
      * @param message The error message.  Not {@code null}.
      */
     void displayGeneralErrorMessage(String title, String message);
-
 }

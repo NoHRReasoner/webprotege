@@ -28,6 +28,15 @@ import edu.stanford.bmir.protege.web.client.library.tokenfield.*;
 import edu.stanford.bmir.protege.web.client.list.EntityNodeListPopupView;
 import edu.stanford.bmir.protege.web.client.list.EntityNodeListPopupViewImpl;
 import edu.stanford.bmir.protege.web.client.match.*;
+import edu.stanford.bmir.protege.web.client.nohrdatabasesettings.NohrDatabaseSettingsDataView;
+import edu.stanford.bmir.protege.web.client.nohrdatabasesettings.NohrDatabaseSettingsDataViewImpl;
+import edu.stanford.bmir.protege.web.client.nohrdbmappings.NoHRDBMappingsView;
+import edu.stanford.bmir.protege.web.client.nohrdbmappings.NoHRDBMappingsViewImpl;
+import edu.stanford.bmir.protege.web.client.nohrpopupviews.*;
+import edu.stanford.bmir.protege.web.client.nohrquery.NoHRQueryView;
+import edu.stanford.bmir.protege.web.client.nohrquery.NoHRQueryViewImpl;
+import edu.stanford.bmir.protege.web.client.nohrrules.NoHRRuleView;
+import edu.stanford.bmir.protege.web.client.nohrrules.NoHRRuleViewImpl;
 import edu.stanford.bmir.protege.web.client.ontology.annotations.AnnotationsView;
 import edu.stanford.bmir.protege.web.client.ontology.annotations.AnnotationsViewImpl;
 import edu.stanford.bmir.protege.web.client.permissions.LoggedInUserProjectPermissionChecker;
@@ -74,6 +83,78 @@ public class ClientProjectModule {
     public ClientProjectModule(@Nonnull ProjectId projectId) {
         this.projectId = checkNotNull(projectId);
     }
+
+    //-----------------ADDED----------------------
+    @Provides
+    NoHRQueryView nohrQueryView(NoHRQueryViewImpl view) {
+        return view;
+    }
+
+    @Provides
+    NoHRRuleView nohrRuleView(NoHRRuleViewImpl view) {
+        return view;
+    }
+
+    @Provides
+    NoHRDBMappingsView nohrDBMappingsView(NoHRDBMappingsViewImpl view) {
+        return view;
+    }
+
+    @Provides
+    AddColumnDialogView addColumnDialogView(AddColumnDialogViewImpl view) {
+        return view;
+    }
+
+    @Provides
+    AddTableDialogView addTableDialogView(AddTableDialogViewImpl view) {
+        return view;
+    }
+
+    @Provides
+    CreateRuleDialogView createRuleDialogView(CreateRuleDialogViewImpl view) {
+        return view;
+    }
+
+    @Provides
+    UpdateRuleDialogView updateRuleDialogView(UpdateRuleDialogViewImpl view) {
+        return view;
+    }
+
+    @Provides
+    UploadRulesDialogView uploadRuleDialogView(UploadRulesDialogViewImpl view) {
+        return view;
+    }
+
+    @Provides
+    CreateDBMappingDialogView createDBMappingDialogView(CreateDBMappingDialogViewImpl view) {
+        return view;
+    }
+
+    @Provides
+    UpdateDBMappingDialogView updateDBMappingDialogView(UpdateDBMappingDialogViewImpl view) {
+        return view;
+    }
+
+    @Provides
+    UploadDBMappingDialogView uploadDBMappingDialogView(UploadDBMappingDialogViewImpl view) {
+        return view;
+    }
+
+    @Provides
+    NohrSettingsView provideNohrSettingsView(NohrSettingsViewImpl impl) {
+        return impl;
+    }
+
+    @Provides
+    NohrDatabaseSettingsView provideNohrDatabaseSettingsView(NohrDatabaseSettingsViewImpl impl) {
+        return impl;
+    }
+
+    @Provides
+    NohrDatabaseSettingsDataView provideNohrDatabaseSettingsDataView(NohrDatabaseSettingsDataViewImpl impl) {
+        return impl;
+    }
+    //-----------------ADDED----------------------
 
     @Provides
     ProjectId provideProjectId() {

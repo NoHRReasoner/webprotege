@@ -6,6 +6,7 @@ import edu.stanford.bmir.protege.web.server.dispatch.ExecutionContext;
 import edu.stanford.bmir.protege.web.server.dispatch.RequestContext;
 import edu.stanford.bmir.protege.web.server.dispatch.RequestValidator;
 import edu.stanford.bmir.protege.web.server.dispatch.validators.NullValidator;
+import edu.stanford.bmir.protege.web.server.nohrdata.UsersNohrInstances;
 import edu.stanford.bmir.protege.web.server.session.WebProtegeSession;
 import edu.stanford.bmir.protege.web.shared.user.LogOutUserAction;
 import edu.stanford.bmir.protege.web.shared.user.LogOutUserResult;
@@ -29,11 +30,15 @@ public class LogOutUserActionHandler implements ApplicationActionHandler<LogOutU
     @Nonnull
     private final UserInSessionFactory userInSessionFactory;
 
+    @Nonnull
+    private UsersNohrInstances usersNohrInstances;
+
     @Inject
     public LogOutUserActionHandler(@Nonnull UserActivityManager userActivityManager,
-                                   @Nonnull UserInSessionFactory userInSessionFactory) {
+                                   @Nonnull UserInSessionFactory userInSessionFactory, @Nonnull UsersNohrInstances usersNohrInstances) {
         this.userActivityManager = checkNotNull(userActivityManager);
         this.userInSessionFactory = checkNotNull(userInSessionFactory);
+        this.usersNohrInstances = usersNohrInstances;
     }
 
     @Nonnull
@@ -54,6 +59,7 @@ public class LogOutUserActionHandler implements ApplicationActionHandler<LogOutU
         WebProtegeSession session = executionContext.getSession();
         UserId userId = session.getUserInSession();
         session.clearUserInSession();
+        usersNohrInstances.stopProjectNohrInstance(userId.getUserName());
         if (!userId.isGuest()) {
             userActivityManager.setLastLogout(userId, System.currentTimeMillis());
         }

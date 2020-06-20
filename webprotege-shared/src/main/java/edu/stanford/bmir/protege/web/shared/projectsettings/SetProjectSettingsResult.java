@@ -3,8 +3,12 @@ package edu.stanford.bmir.protege.web.shared.projectsettings;
 import com.google.common.base.MoreObjects;
 import com.google.common.base.Objects;
 import edu.stanford.bmir.protege.web.shared.dispatch.Result;
+import edu.stanford.bmir.protege.web.shared.nohrcodes.NohrDatabaseSettings;
+import edu.stanford.bmir.protege.web.shared.nohrcodes.NohrSettings;
 
 import javax.annotation.Nonnull;
+
+import java.util.List;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
@@ -17,16 +21,30 @@ public class SetProjectSettingsResult implements Result {
 
     private ProjectSettings projectSettings;
 
+    private NohrSettings nohrSettings;
+
+    private List<NohrDatabaseSettings> nohrDatabaseSettings;
+
     private SetProjectSettingsResult() {
 
     }
 
-    public SetProjectSettingsResult(@Nonnull ProjectSettings projectSettings) {
+    public SetProjectSettingsResult(@Nonnull ProjectSettings projectSettings, @Nonnull NohrSettings nohrSettings, @Nonnull List<NohrDatabaseSettings> nohrDatabaseSettings) {
         this.projectSettings = checkNotNull(projectSettings);
+        this.nohrSettings = checkNotNull(nohrSettings);
+        this.nohrDatabaseSettings = checkNotNull(nohrDatabaseSettings);
     }
 
     public ProjectSettings getProjectSettings() {
         return projectSettings;
+    }
+
+    public NohrSettings getNohrSettings() {
+        return nohrSettings;
+    }
+
+    public List<NohrDatabaseSettings> getNohrDatabaseSettings() {
+        return nohrDatabaseSettings;
     }
 
     @Override
@@ -50,7 +68,7 @@ public class SetProjectSettingsResult implements Result {
     @Override
     public String toString() {
         return MoreObjects.toStringHelper("SetProjectSettingsResult")
-                          .addValue(projectSettings)
-                          .toString();
+                .addValue(projectSettings)
+                .toString();
     }
 }

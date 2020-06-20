@@ -1,5 +1,6 @@
 package edu.stanford.bmir.protege.web.server.app;
 
+import edu.stanford.bmir.protege.web.server.nohrdata.UsersNohrInstances;
 import edu.stanford.bmir.protege.web.server.session.WebProtegeSession;
 import edu.stanford.bmir.protege.web.server.session.WebProtegeSessionImpl;
 import edu.stanford.bmir.protege.web.server.user.UserActivityManager;
@@ -27,9 +28,12 @@ public class WebProtegeSessionListener implements HttpSessionListener {
 
     private final UserActivityManager userActivityManager;
 
+    private UsersNohrInstances usersNohrInstances;
+
     @Inject
-    public WebProtegeSessionListener(@Nonnull UserActivityManager userActivityManager) {
+    public WebProtegeSessionListener(@Nonnull UserActivityManager userActivityManager, @Nonnull UsersNohrInstances usersNohrInstances) {
         this.userActivityManager = checkNotNull(userActivityManager);
+        this.usersNohrInstances = usersNohrInstances;
     }
 
     @Override
@@ -40,6 +44,9 @@ public class WebProtegeSessionListener implements HttpSessionListener {
     public void sessionDestroyed(HttpSessionEvent httpSessionEvent) {
         WebProtegeSession session = new WebProtegeSessionImpl(httpSessionEvent.getSession());
         UserId userId = session.getUserInSession();
+        //Checks if user is executing a query on any of is projects
+        /*if (!usersNohrInstances.isQueryExecuting(userId.getUserName()))*/
+        usersNohrInstances.stopProjectNohrInstance(userId.getUserName());
         if (!userId.isGuest()) {
             logger.info("{} Session expired", userId);
             userActivityManager.setLastLogout(userId, System.currentTimeMillis());

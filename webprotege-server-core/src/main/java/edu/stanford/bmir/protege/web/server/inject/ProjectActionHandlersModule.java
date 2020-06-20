@@ -32,6 +32,7 @@ import edu.stanford.bmir.protege.web.server.mansyntax.render.GetEntityRenderingA
 import edu.stanford.bmir.protege.web.server.match.GetMatchingEntitiesActionHandler;
 import edu.stanford.bmir.protege.web.server.merge.ComputeProjectMergeActionHandler;
 import edu.stanford.bmir.protege.web.server.merge.MergeUploadedProjectActionHandler;
+import edu.stanford.bmir.protege.web.server.nohrdata.*;
 import edu.stanford.bmir.protege.web.server.obo.*;
 import edu.stanford.bmir.protege.web.server.perspective.*;
 import edu.stanford.bmir.protege.web.server.project.GetProjectInfoActionHandler;
@@ -57,9 +58,7 @@ import edu.stanford.bmir.protege.web.server.watches.AddWatchActionHandler;
 import edu.stanford.bmir.protege.web.server.watches.GetWatchesActionHandler;
 import edu.stanford.bmir.protege.web.server.watches.RemoveWatchActionHandler;
 import edu.stanford.bmir.protege.web.server.watches.SetEntityWatchesActionHandler;
-import edu.stanford.bmir.protege.web.shared.crud.GetEntityCrudKitsAction;
-import edu.stanford.bmir.protege.web.shared.crud.GetEntityCrudKitsResult;
-import edu.stanford.bmir.protege.web.shared.dispatch.ProjectAction;
+import edu.stanford.bmir.protege.web.shared.dispatch.actions.ExecNohrQueryAction;
 import edu.stanford.bmir.protege.web.shared.issues.DeleteEntityCommentAction;
 import edu.stanford.bmir.protege.web.shared.issues.DeleteEntityCommentResult;
 
@@ -70,6 +69,86 @@ import edu.stanford.bmir.protege.web.shared.issues.DeleteEntityCommentResult;
  */
 @Module
 public class ProjectActionHandlersModule {
+
+    // ADDED-------------------------
+    @Provides @IntoSet
+    public ProjectActionHandler provideCreateRulesActionHandler(
+            CreateRulesActionHandler handler) {
+        return handler;
+    }
+
+    @Provides @IntoSet
+    public ProjectActionHandler provideDeleteRulesActionHandler(
+            DeleteRulesActionHandler handler) {
+        return handler;
+    }
+
+    @Provides @IntoSet
+    public ProjectActionHandler provideGetRulesActionHandler(
+            GetRulesActionHandler handler) {
+        return handler;
+    }
+
+    @Provides @IntoSet
+    public ProjectActionHandler provideExecNohrQueryActionHandler(
+            ExecNohrQueryActionHandler handler) {
+        return handler;
+    }
+
+    @Provides @IntoSet
+    public ProjectActionHandler provideUpdateRulesActionHandler(
+            UpdateRulesActionHandler handler) {
+        return handler;
+    }
+
+    @Provides @IntoSet
+    public ProjectActionHandler provideUploadRulesActionHandler(
+            UploadRulesActionHandler handler) {
+        return handler;
+    }
+
+    @Provides @IntoSet
+    public ProjectActionHandler provideCreateDBMappingActionHandler(
+            CreateDBMappingActionHandler handler) {
+        return handler;
+    }
+
+    @Provides @IntoSet
+    public ProjectActionHandler provideDeleteDBMappingActionHandler(
+            DeleteDBMappingActionHandler handler) {
+        return handler;
+    }
+
+    @Provides @IntoSet
+    public ProjectActionHandler provideGetDBMappingInfoActionHandler(
+            GetDBMappingInfoActionHandler handler) {
+        return handler;
+    }
+
+    @Provides @IntoSet
+    public ProjectActionHandler provideGetDBMappingActionHandler(
+            GetDBMappingActionHandler handler) {
+        return handler;
+    }
+
+    @Provides @IntoSet
+    public ProjectActionHandler provideGetDBMappingSettingsActionHandler(
+            GetDBMappingSettingsActionHandler handler) {
+        return handler;
+    }
+
+    @Provides @IntoSet
+    public ProjectActionHandler provideUpdateDBMappingActionHandler(
+            UpdateDBMappingActionHandler handler) {
+        return handler;
+    }
+
+    @Provides @IntoSet
+    public ProjectActionHandler provideUploadDBMappingActionHandler(
+            UploadDBMappingActionHandler handler) {
+        return handler;
+    }
+    // ADDED-------------------------
 
     @Provides @IntoSet
     public ProjectActionHandler provideGetProjectSettingsActionHandler(GetProjectSettingsActionHandler handler) {

@@ -3,6 +3,10 @@ package edu.stanford.bmir.protege.web.shared.projectsettings;
 import com.google.common.base.MoreObjects;
 import com.google.common.base.Objects;
 import edu.stanford.bmir.protege.web.shared.dispatch.AbstractHasProjectAction;
+import edu.stanford.bmir.protege.web.shared.nohrcodes.NohrDatabaseSettings;
+import edu.stanford.bmir.protege.web.shared.nohrcodes.NohrSettings;
+
+import java.util.List;
 
 /**
  * Matthew Horridge
@@ -13,19 +17,33 @@ public class SetProjectSettingsAction extends AbstractHasProjectAction<SetProjec
 
     private ProjectSettings projectSettings;
 
+    private NohrSettings nohrSettings;
+
+    private List<NohrDatabaseSettings> nohrDatabaseSettings;
+
     /**
      * For serialization purposes only
      */
     private SetProjectSettingsAction() {
     }
 
-    public SetProjectSettingsAction(ProjectSettings projectSettings) {
+    public SetProjectSettingsAction(ProjectSettings projectSettings, NohrSettings nohrSettings, List<NohrDatabaseSettings> nohrDatabaseSettings) {
         super(projectSettings.getProjectId());
         this.projectSettings = projectSettings;
+        this.nohrSettings = nohrSettings;
+        this.nohrDatabaseSettings = nohrDatabaseSettings;
     }
 
     public ProjectSettings getProjectSettings() {
         return projectSettings;
+    }
+
+    public NohrSettings getNohrSettings() {
+        return nohrSettings;
+    }
+
+    public List<NohrDatabaseSettings> getNohrDatabaseSettings() {
+        return nohrDatabaseSettings;
     }
 
     @Override

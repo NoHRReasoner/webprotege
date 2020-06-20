@@ -4,7 +4,9 @@ import dagger.Component;
 import edu.stanford.bmir.protege.web.server.access.AccessManager;
 import edu.stanford.bmir.protege.web.server.api.ApiModule;
 import edu.stanford.bmir.protege.web.server.dispatch.DispatchServlet;
+import edu.stanford.bmir.protege.web.server.download.DBMappingDownloadServlet;
 import edu.stanford.bmir.protege.web.server.download.ProjectDownloadServlet;
+import edu.stanford.bmir.protege.web.server.download.RulesDownloadServlet;
 import edu.stanford.bmir.protege.web.server.inject.*;
 import edu.stanford.bmir.protege.web.server.inject.project.ProjectModule;
 import edu.stanford.bmir.protege.web.server.project.ProjectCacheManager;
@@ -48,6 +50,10 @@ public interface ServerComponent {
     ServletContainer getJerseyServletContainer();
 
     ProjectDownloadServlet getProjectDownloadServlet();
+
+    RulesDownloadServlet getRulesDownloadServlet();
+
+    DBMappingDownloadServlet getDBMappingDownloadServlet();
 
     DispatchServlet getDispatchServlet();
 

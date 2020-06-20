@@ -45,6 +45,9 @@ public class PerspectiveDataCopier {
             copyPerspectiveFile("Query.json");
             copyPerspectiveFile("OWL Classes.json");
             copyPerspectiveFile("OWL Properties.json");
+            copyPerspectiveFile("NoHR Rules.json");
+            copyPerspectiveFile("NoHR Query.json");
+            copyPerspectiveFile("NoHR Database Mappings.json");
 
 //            URL url = getClass().getResource(DEFAULT_PERSPECTIVE_DATA_RESOURCE_PATH);
 //            File templateDefaultPerspectiveDataDirectory = new File(url.toURI());

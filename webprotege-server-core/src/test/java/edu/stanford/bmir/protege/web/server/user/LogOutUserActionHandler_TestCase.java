@@ -57,7 +57,7 @@ public class LogOutUserActionHandler_TestCase {
         when(userInSessionFactory.getUserInSession(UserId.getGuest())).thenReturn(guestUserInSession);
         when(executionContext.getSession()).thenReturn(session);
         when(session.getUserInSession()).thenReturn(userId);
-        actionHandler = new LogOutUserActionHandler(activityManager, userInSessionFactory);
+        actionHandler = new LogOutUserActionHandler(activityManager, userInSessionFactory, null);
     }
 
     @Test
