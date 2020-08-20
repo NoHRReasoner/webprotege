@@ -342,36 +342,6 @@ public class StaticELOntologyReduction implements ELOntologyReduction {
      * @throws UnsupportedAxiomsException if {@code ontology} has some concept
      * that can't be reduced.
      */
-    //TODO delete
-    /*public StaticELOntologyReduction(OWLOntology ontology, Vocabulary vocabulary) throws UnsupportedAxiomsException {
-        Objects.requireNonNull(ontology);
-        Objects.requireNonNull(vocabulary);
-        System.out.println("entrou");
-        this.ontology = ontology;
-        this.vocabulary = vocabulary;
-        System.out.println("get class assertions");
-        final Set<OWLClassAssertionAxiom> conceptAssertions = ontology.getAxioms(AxiomType.CLASS_ASSERTION);
-        System.out.println("comceptSubsumptions");
-        final Set<OWLSubClassOfAxiom> conceptSubsumptions = conceptSubsumptions(ontology);
-        System.out.println("roleSubsumptions");
-        roleSubsumptions = roleSubsumptions(ontology);
-        try {
-            System.out.println("closure");
-            closure = closure(conceptAssertions, conceptSubsumptions, roleSubsumptions);
-        } catch (final InvalidTaxonomyException e) {
-            throw new UnsupportedAxiomsException(null);
-        }
-        System.out.println("NEGATIVE_OBJECT_PROPERTY_ASSERTION");
-        int negAssertions = ontology.getAxiomCount(AxiomType.NEGATIVE_OBJECT_PROPERTY_ASSERTION);
-        System.out.println("NEGATIVE_DATA_PROPERTY_ASSERTION");
-        negAssertions += ontology.getAxiomCount(AxiomType.NEGATIVE_DATA_PROPERTY_ASSERTION);
-        System.out.println("hasDisjunctions");
-        hasDisjunctions = hasDisjunctions(closure) || negAssertions > 0;
-        System.out.println("chainSubsumptions");
-        chainSubsumptions = chainSubsumptions(ontology);
-    }*/
-
-    //TODO uncomment
     public StaticELOntologyReduction(OWLOntology ontology, Vocabulary vocabulary) throws UnsupportedAxiomsException {
         Objects.requireNonNull(ontology);
         Objects.requireNonNull(vocabulary);
@@ -442,35 +412,6 @@ public class StaticELOntologyReduction implements ELOntologyReduction {
      *
      * @param ontology an ontology <i>O</i>.
      */
-    //TODO delete
-    /*private void classify(OWLOntology ontology) {
-        RuntimesLogger.start("[OWL EL (ELK)] ontology inference");
-        Logger.getLogger("org.semanticweb.elk").setLevel(Level.ERROR);
-        System.out.println("ElkReasonerFactory");
-        final OWLReasonerFactory reasonerFactory = new ElkReasonerFactory();
-        System.out.println("createReasoner");
-        final OWLReasoner reasoner = reasonerFactory.createReasoner(ontology);
-        *//**
-         * Classify the ontology.
-         *//*
-        System.out.println("precomputeInferences(InferenceType.CLASS_HIERARCHY");
-        reasoner.precomputeInferences(InferenceType.CLASS_HIERARCHY);
-        System.out.println("generators");
-        final List<InferredAxiomGenerator<? extends OWLAxiom>> generators = new ArrayList<InferredAxiomGenerator<? extends OWLAxiom>>(
-                3);
-        System.out.println("generators-add-InferredSubClassAxiomGenerator");
-        generators.add(new InferredSubClassAxiomGenerator());
-        System.out.println("generators-add-InferredClassAssertionAxiomGenerator");
-        generators.add(new InferredClassAssertionAxiomGenerator());
-        System.out.println("inferredOntologyGenerator");
-        final InferredOntologyGenerator inferredOntologyGenerator = new InferredOntologyGenerator(reasoner, generators);
-        System.out.println("inferredOntologyGenerator.fillOntology");
-        inferredOntologyGenerator.fillOntology(ontology.getOWLOntologyManager().getOWLDataFactory(), ontology);
-        System.out.println("finish");
-        RuntimesLogger.stop("[OWL EL (ELK)] ontology inference", "loading");
-        reasoner.dispose();
-    }*/
-    //TODO uncomment
     private void classify(OWLOntology ontology) {
         RuntimesLogger.start("[OWL EL (ELK)] ontology inference");
         Logger.getLogger("org.semanticweb.elk").setLevel(Level.ERROR);

@@ -44,10 +44,7 @@ public class OntologyTranslatorFactory {
         if (profile == null) {
             profile = Profile.getProfile(ontology);
         }
-        //TODO delete
-        return new ELOntologyTranslator(ontology, vocabulary, dedutiveDatabase, ignoreAllUnsupportedAxiom, ignoredUnsupportedAxioms);
-        //TODO uncomment
-        /*switch (profile) {
+        switch (profile) {
             case OWL2_EL:
                 if (preferDLEngineOverEL) {
                     return new DLOntologyTranslation(ontology, vocabulary, dedutiveDatabase, getDLInferenceEngine(), ignoreAllUnsupportedAxiom, ignoredUnsupportedAxioms);
@@ -70,7 +67,7 @@ public class OntologyTranslatorFactory {
                 return new DLOntologyTranslation(ontology, vocabulary, dedutiveDatabase, getDLInferenceEngine(), ignoreAllUnsupportedAxiom, ignoredUnsupportedAxioms);
             default:
                 throw new OWLProfilesViolationsException();
-        }*/
+        }
     }
 
     private InferenceEngine getDLInferenceEngine() {
